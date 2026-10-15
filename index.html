@@ -103,6 +103,53 @@
         : "Your question: " + question +
           "\n\nThis is a prototype. N-ATLAS AI has not been connected yet.";
     }
-  </script>
+  </script><section style="padding:20px;max-width:500px;margin:20px auto;border:1px solid #ccc;border-radius:12px;font-family:Arial">
+  <h2>💰 Lissafin Riba da Asara</h2>
+
+  <label>Kuɗin sayen kaya (₦)</label>
+  <input id="buy" type="number" placeholder="Misali 10000" style="width:100%;padding:10px;box-sizing:border-box">
+
+  <label>Kuɗin sayarwa (₦)</label>
+  <input id="sell" type="number" placeholder="Misali 12000" style="width:100%;padding:10px;box-sizing:border-box">
+
+  <label>Sauran kuɗaɗe (₦)</label>
+  <input id="cost" type="number" placeholder="Misali 500" style="width:100%;padding:10px;box-sizing:border-box">
+
+  <button onclick="calculateProfit()" style="margin-top:15px;padding:12px;background:green;color:white;border:0;border-radius:6px;width:100%">
+    Yi Lissafi
+  </button>
+
+  <p id="profitResult" aria-live="polite"></p>
+</section>
+
+<script>
+function calculateProfit() {
+  const buy = Number(document.getElementById("buy").value);
+  const sell = Number(document.getElementById("sell").value);
+  const cost = Number(document.getElementById("cost").value);
+  const result = document.getElementById("profitResult");
+
+  if (
+    document.getElementById("buy").value === "" ||
+    document.getElementById("sell").value === "" ||
+    document.getElementById("cost").value === "" ||
+    buy < 0 || sell < 0 || cost < 0
+  ) {
+    result.textContent = "Don Allah, shigar da dukkan kuɗaɗen da suka dace.";
+    return;
+  }
+
+  const total = sell - buy - cost;
+  const naira = new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    maximumFractionDigits: 2
+  });
+
+  result.textContent = total >= 0
+    ? "Ribar da ka samu: " + naira.format(total)
+    : "Asarar da ka yi: " + naira.format(Math.abs(total));
+}
+    </script>
 </body>
 </html>
