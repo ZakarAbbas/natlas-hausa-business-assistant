@@ -191,6 +191,90 @@ function calculateProfit() {
       ? "Asarar da ka yi: " + money.format(-total)
       : "Ba ka samu riba ko asara ba.";
 }
+</script><section id="hausaVoice" style="max-width:500px;margin:20px auto;padding:20px;border-radius:12px;background:#f0fdf4;font-family:Arial,sans-serif">
+  <h2>🎙️ Mataimakin Hausa da Murya</h2>
+  <p>Danna maɓallin nan ka yi magana da Hausa.</p>
+
+  <button id="voiceButton" type="button"
+    style="padding:12px 18px;background:green;color:white;border:0;border-radius:8px">
+    🎤 Fara Magana
+  </button>
+
+  <p id="voiceStatus" aria-live="polite">A shirye nake.</p>
+
+  <textarea id="voiceQuestion" rows="4"
+    placeholder="Abin da ka faɗa zai bayyana a nan..."
+    style="width:100%;box-sizing:border-box;padding:10px"></textarea>
+
+  <button id="speakButton" type="button"
+    style="padding:10px;background:#166534;color:white;border:0;border-radius:8px">
+    🔊 Karanta Rubutun
+  </button>
+</section>
+
+<script>
+(() => {
+  const button = document.getElementById("voiceButton");
+  const status = document.getElementById("voiceStatus");
+  const question = document.getElementById("voiceQuestion");
+  const speakButton = document.getElementById("speakButton");
+
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  button.addEventListener("click", () => {
+    if (!SpeechRecognition) {
+      status.textContent =
+        "Mai bincikenka ba ya goyon bayan wannan fasalin. Gwada Chrome.";
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "ha-NG";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      status.textContent = "Ina sauraronka... Yi magana yanzu.";
+    };
+
+    recognition.onresult = (event) => {
+      question.value = event.results[0][0].transcript;
+      status.textContent = "An gane maganarka. Ka duba rubutun.";
+    };
+
+    recognition.onerror = () => {
+      status.textContent =
+        "Ba a gane magana ba. Duba izinin makirufo da intanet.";
+    };
+
+    recognition.onend = () => {
+      button.disabled = false;
+    };
+
+    button.disabled = true;
+    recognition.start();
+  });
+
+  speakButton.addEventListener("click", () => {
+    if (!("speechSynthesis" in window)) {
+      status.textContent = "Wayarka ba ta goyon bayan karanta rubutu da murya.";
+      return;
+    }
+
+    const text = question.value.trim();
+    if (!text) {
+      status.textContent = "Ka fara yin magana ko rubuta wani abu.";
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "ha-NG";
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+    status.textContent = "Ina karanta rubutun.";
+  });
+})();
 </script>
 </body>
 </html>
