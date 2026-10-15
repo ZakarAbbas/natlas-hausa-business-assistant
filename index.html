@@ -137,19 +137,60 @@ function calculateProfit() {
   ) {
     result.textContent = "Don Allah, shigar da dukkan kuɗaɗen da suka dace.";
     return;
+  }  
+</script><section style="max-width:500px;margin:20px auto;padding:20px;border:1px solid #ddd;border-radius:12px;font-family:Arial,sans-serif">
+  <h2>💰 Lissafin Riba da Asara</h2>
+
+  <label>Kuɗin sayen kaya (₦)</label>
+  <input id="buy" type="number" min="0" placeholder="Misali 10000" style="width:100%;padding:10px;box-sizing:border-box;margin:8px 0">
+
+  <label>Kuɗin sayarwa (₦)</label>
+  <input id="sell" type="number" min="0" placeholder="Misali 12000" style="width:100%;padding:10px;box-sizing:border-box;margin:8px 0">
+
+  <label>Sauran kuɗaɗe (₦)</label>
+  <input id="cost" type="number" min="0" placeholder="Misali 500" style="width:100%;padding:10px;box-sizing:border-box;margin:8px 0">
+
+  <button onclick="calculateProfit()" style="width:100%;padding:12px;background:green;color:white;border:0;border-radius:8px;margin-top:10px">
+    Yi Lissafi
+  </button>
+
+  <p id="profitResult" aria-live="polite"></p>
+</section>
+
+<script>
+function calculateProfit() {
+  const buyInput = document.getElementById("buy").value;
+  const sellInput = document.getElementById("sell").value;
+  const costInput = document.getElementById("cost").value;
+  const result = document.getElementById("profitResult");
+
+  if (buyInput === "" || sellInput === "" || costInput === "") {
+    result.textContent = "Don Allah, cika dukkan guraben kuɗi.";
+    return;
+  }
+
+  const buy = Number(buyInput);
+  const sell = Number(sellInput);
+  const cost = Number(costInput);
+
+  if (![buy, sell, cost].every(n => Number.isFinite(n) && n >= 0)) {
+    result.textContent = "Ka shigar da kuɗi masu inganci.";
+    return;
   }
 
   const total = sell - buy - cost;
-  const naira = new Intl.NumberFormat("en-NG", {
+  const money = new Intl.NumberFormat("en-NG", {
     style: "currency",
     currency: "NGN",
     maximumFractionDigits: 2
   });
 
-  result.textContent = total >= 0
-    ? "Ribar da ka samu: " + naira.format(total)
-    : "Asarar da ka yi: " + naira.format(Math.abs(total));
+  result.textContent = total > 0
+    ? "Ribar da ka samu: " + money.format(total)
+    : total < 0
+      ? "Asarar da ka yi: " + money.format(-total)
+      : "Ba ka samu riba ko asara ba.";
 }
-    </script>
+</script>
 </body>
 </html>
