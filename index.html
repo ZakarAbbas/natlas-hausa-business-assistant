@@ -3,278 +3,471 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>N-ATLAS Hausa Business Assistant</title>
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background: #f0f7f2;
       margin: 0;
-      padding: 20px;
+      padding: 15px;
       color: #183b2b;
     }
 
     .container {
       max-width: 600px;
-      margin: 30px auto;
+      margin: 20px auto;
       background: white;
-      padding: 24px;
+      padding: 20px;
       border-radius: 16px;
       box-shadow: 0 4px 15px #0001;
     }
 
-    h1 { color: #087443; }
-    
-    textarea, select, button {
+    h1, h2 {
+      color: #087443;
+    }
+
+    h1 {
+      font-size: 25px;
+      text-align: center;
+    }
+
+    .card {
+      margin-top: 20px;
+      padding: 16px;
+      border: 1px solid #d5e5da;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    textarea, select, input, button {
       width: 100%;
-      box-sizing: border-box;
       padding: 12px;
-      margin: 10px 0;
+      margin-top: 8px;
       border-radius: 8px;
       font-size: 16px;
     }
 
-    textarea, select {
+    textarea, select, input {
       border: 1px solid #bbb;
     }
 
-    textarea { min-height: 120px; }
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
 
     button {
       background: #087443;
       color: white;
       border: none;
       font-weight: bold;
+      cursor: pointer;
     }
 
-    #answer {
+    button:active {
+      opacity: 0.8;
+    }
+
+    .answer {
       background: #eaf6ee;
       padding: 15px;
       border-radius: 8px;
       white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      min-height: 45px;
     }
 
     footer {
       margin-top: 25px;
+      text-align: center;
       font-size: 13px;
       color: #666;
     }
+
+    .profit {
+      color: #087443;
+      background: #d9fbe5;
+    }
+
+    .loss {
+      color: #b00020;
+      background: #ffe0e0;
+    }
+
+    .neutral {
+      color: #333;
+      background: #eeeeee;
+    }
   </style>
 </head>
+
 <body>
+
   <main class="container">
-    <h1>🇳🇬 N-ATLAS Business Assistant</h1>
-    <p>Your assistant for local business in Nigeria.</p>
 
-    <label for="language">Choose language / Zaɓi harshe</label>
-    <select id="language">
-      <option value="ha">Hausa</option>
-      <option value="en">English</option>
-    </select>
+    <h1>🇳🇬 N-ATLAS</h1>
+    <p style="text-align:center">
+      Mataimakin Kasuwanci na Najeriya
+    </p>
 
-    <label for="question">Write your business question / Rubuta tambayarka</label>
-    <textarea id="question" placeholder="Misali: Ta yaya zan inganta kasuwancin kayan babur?"></textarea>
+    <!-- Zaɓin harshe -->
+    <section class="card">
 
-    <button onclick="getAnswer()">Get Help / Nemi Taimako</button>
+      <h2>🌐 Harshe / Language</h2>
 
-    <h3>Answer / Amsa</h3>
-    <div id="answer">Amsarka za ta bayyana a nan.</div>
+      <label for="language">Zaɓi harshe</label>
+
+      <select id="language">
+        <option value="ha">Hausa</option>
+        <option value="en">English</option>
+      </select>
+
+    </section>
+
+    <!-- Mataimakin kasuwanci -->
+    <section class="card">
+
+      <h2>🤖 Mataimakin Kasuwanci</h2>
+
+      <label for="question">
+        Rubuta tambayarka
+      </label>
+
+      <textarea
+        id="question"
+        placeholder="Misali: Ta yaya zan inganta kasuwancin kayan babur?"
+      ></textarea>
+
+      <button type="button" id="helpButton">
+        Nemi Taimako
+      </button>
+
+      <h3>Amsa</h3>
+
+      <div id="answer" class="answer" aria-live="polite">
+        Amsarka za ta bayyana a nan.
+      </div>
+
+    </section>
+
+    <!-- Lissafin riba da asara -->
+    <section class="card">
+
+      <h2>💰 Lissafin Riba da Asara</h2>
+
+      <label for="buy">
+        Kuɗin sayen kaya (₦)
+      </label>
+
+      <input
+        id="buy"
+        type="number"
+        min="0"
+        step="0.01"
+        placeholder="Misali 10000"
+      >
+
+      <label for="sell">
+        Kuɗin sayarwa (₦)
+      </label>
+
+      <input
+        id="sell"
+        type="number"
+        min="0"
+        step="0.01"
+        placeholder="Misali 15000"
+      >
+
+      <label for="cost">
+        Sauran kuɗaɗe (₦)
+      </label>
+
+      <input
+        id="cost"
+        type="number"
+        min="0"
+        step="0.01"
+        placeholder="Misali 1000"
+      >
+
+      <button type="button" id="calculateButton">
+        Yi Lissafi
+      </button>
+
+      <p id="profitResult" class="answer neutral"
+         aria-live="polite">
+        Sakamakon lissafi zai bayyana a nan.
+      </p>
+
+    </section>
+
+    <!-- Mataimakin murya -->
+    <section class="card">
+
+      <h2>🎙️ Mataimakin Hausa da Murya</h2>
+
+      <p>
+        Danna maɓallin nan domin yin magana.
+      </p>
+
+      <button type="button" id="voiceButton">
+        🎤 Fara Magana
+      </button>
+
+      <p id="voiceStatus" aria-live="polite">
+        A shirye nake.
+      </p>
+
+      <label for="voiceQuestion">
+        Rubutun murya
+      </label>
+
+      <textarea
+        id="voiceQuestion"
+        placeholder="Abin da ka faɗa zai bayyana a nan..."
+      ></textarea>
+
+      <button type="button" id="speakButton">
+        🔊 Karanta Rubutu
+      </button>
+
+    </section>
 
     <footer>
-      Prototype by Abbas | N-ATLAS integration is not yet connected.
+      N-ATLAS Business Assistant |
+      Prototype by Abbas
     </footer>
+
   </main>
 
   <script>
-    function getAnswer() {
-      const language = document.getElementById("language").value;
-      const question = document.getElementById("question").value.trim();
-      const answer = document.getElementById("answer");
+    // 1. Mataimakin kasuwanci
+    document.getElementById("helpButton")
+      .addEventListener("click", function () {
 
-      if (!question) {
+        const language =
+          document.getElementById("language").value;
+
+        const question =
+          document.getElementById("question").value.trim();
+
+        const answer =
+          document.getElementById("answer");
+
+        if (!question) {
+          answer.textContent = language === "ha"
+            ? "Don Allah, ka rubuta tambayarka tukuna."
+            : "Please enter your question first.";
+
+          return;
+        }
+
         answer.textContent = language === "ha"
-          ? "Don Allah, ka rubuta tambayarka tukuna."
-          : "Please enter your question first.";
+          ? "Na karɓi tambayarka:\n" + question +
+            "\n\nWannan samfurin gwaji ne. " +
+            "Har yanzu ba a haɗa N-ATLAS AI ba. " +
+            "Don samun amsoshin AI na gaske, " +
+            "ana buƙatar haɗa sabis na AI."
+          : "Your question:\n" + question +
+            "\n\nThis is a prototype. " +
+            "N-ATLAS AI is not connected yet.";
+      });
+
+
+    // 2. Lissafin riba da asara
+    document.getElementById("calculateButton")
+      .addEventListener("click", function () {
+
+        const buyText =
+          document.getElementById("buy").value;
+
+        const sellText =
+          document.getElementById("sell").value;
+
+        const costText =
+          document.getElementById("cost").value;
+
+        const result =
+          document.getElementById("profitResult");
+
+        if (
+          buyText === "" ||
+          sellText === "" ||
+          costText === ""
+        ) {
+          result.textContent =
+            "Don Allah, cika dukkan guraben kuɗi.";
+
+          result.className = "answer neutral";
+          return;
+        }
+
+        const buy = Number(buyText);
+        const sell = Number(sellText);
+        const cost = Number(costText);
+
+        if (
+          ![buy, sell, cost].every(
+            n => Number.isFinite(n) && n >= 0
+          )
+        ) {
+          result.textContent =
+            "Ka shigar da kuɗi masu inganci.";
+
+          result.className = "answer neutral";
+          return;
+        }
+
+        const profit = sell - buy - cost;
+
+        const money = new Intl.NumberFormat("en-NG", {
+          style: "currency",
+          currency: "NGN",
+          maximumFractionDigits: 2
+        });
+
+        if (profit > 0) {
+          result.textContent =
+            "RIBAR DA KA SAMU: " + money.format(profit);
+
+          result.className = "answer profit";
+
+        } else if (profit < 0) {
+          result.textContent =
+            "ASARAR DA KA YI: " +
+            money.format(Math.abs(profit));
+
+          result.className = "answer loss";
+
+        } else {
+          result.textContent =
+            "Babu riba ko asara.";
+
+          result.className = "answer neutral";
+        }
+      });
+
+
+    // 3. Shigar da tambaya ta murya
+    const voiceButton =
+      document.getElementById("voiceButton");
+
+    const voiceStatus =
+      document.getElementById("voiceStatus");
+
+    const voiceQuestion =
+      document.getElementById("voiceQuestion");
+
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+    voiceButton.addEventListener("click", function () {
+
+      if (!SpeechRecognition) {
+        voiceStatus.textContent =
+          "Mai bincikenka ba ya goyon bayan shigar da murya. " +
+          "Gwada wani sabon Chrome.";
+
         return;
       }
 
-      answer.textContent = language === "ha"
-        ? "Na karɓi tambayarka: " + question +
-          "\n\nWannan samfurin gwaji ne. Har yanzu ba a haɗa shi da N-ATLAS AI ba."
-        : "Your question: " + question +
-          "\n\nThis is a prototype. N-ATLAS AI has not been connected yet.";
-    }
-  </script><section style="padding:20px;max-width:500px;margin:20px auto;border:1px solid #ccc;border-radius:12px;font-family:Arial">
-  <h2>💰 Lissafin Riba da Asara</h2>
+      const recognition = new SpeechRecognition();
 
-  <label>Kuɗin sayen kaya (₦)</label>
-  <input id="buy" type="number" placeholder="Misali 10000" style="width:100%;padding:10px;box-sizing:border-box">
+      recognition.lang =
+        document.getElementById("language").value === "ha"
+          ? "ha-NG"
+          : "en-US";
 
-  <label>Kuɗin sayarwa (₦)</label>
-  <input id="sell" type="number" placeholder="Misali 12000" style="width:100%;padding:10px;box-sizing:border-box">
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
 
-  <label>Sauran kuɗaɗe (₦)</label>
-  <input id="cost" type="number" placeholder="Misali 500" style="width:100%;padding:10px;box-sizing:border-box">
+      recognition.onstart = function () {
+        voiceStatus.textContent =
+          "Ina sauraronka. Yi magana yanzu.";
 
-  <button onclick="calculateProfit()" style="margin-top:15px;padding:12px;background:green;color:white;border:0;border-radius:6px;width:100%">
-    Yi Lissafi
-  </button>
+        voiceButton.disabled = true;
+      };
 
-  <p id="profitResult" aria-live="polite"></p>
-</section>
+      recognition.onresult = function (event) {
+        voiceQuestion.value =
+          event.results[0][0].transcript;
 
-<script>
-function calculateProfit() {
-  const buy = Number(document.getElementById("buy").value);
-  const sell = Number(document.getElementById("sell").value);
-  const cost = Number(document.getElementById("cost").value);
-  const result = document.getElementById("profitResult");
+        voiceStatus.textContent =
+          "An karɓi maganarka.";
+      };
 
-  if (
-    document.getElementById("buy").value === "" ||
-    document.getElementById("sell").value === "" ||
-    document.getElementById("cost").value === "" ||
-    buy < 0 || sell < 0 || cost < 0
-  ) {
-    result.textContent = "Don Allah, shigar da dukkan kuɗaɗen da suka dace.";
-    return;
-  }  
-</script><section style="max-width:500px;margin:20px auto;padding:20px;border:1px solid #ddd;border-radius:12px;font-family:Arial,sans-serif">
-  <h2>💰 Lissafin Riba da Asara</h2>
+      recognition.onerror = function () {
+        voiceStatus.textContent =
+          "An samu matsala. Duba makirufo da intanet.";
+      };
 
-  <label>Kuɗin sayen kaya (₦)</label>
-  <input id="buy" type="number" min="0" placeholder="Misali 10000" style="width:100%;padding:10px;box-sizing:border-box;margin:8px 0">
+      recognition.onend = function () {
+        voiceButton.disabled = false;
+      };
 
-  <label>Kuɗin sayarwa (₦)</label>
-  <input id="sell" type="number" min="0" placeholder="Misali 12000" style="width:100%;padding:10px;box-sizing:border-box;margin:8px 0">
+      try {
+        recognition.start();
+      } catch (error) {
+        voiceButton.disabled = false;
 
-  <label>Sauran kuɗaɗe (₦)</label>
-  <input id="cost" type="number" min="0" placeholder="Misali 500" style="width:100%;padding:10px;box-sizing:border-box;margin:8px 0">
+        voiceStatus.textContent =
+          "Ba a iya fara makirufo ba. Sake gwadawa.";
+      }
+    });
 
-  <button onclick="calculateProfit()" style="width:100%;padding:12px;background:green;color:white;border:0;border-radius:8px;margin-top:10px">
-    Yi Lissafi
-  </button>
 
-  <p id="profitResult" aria-live="polite"></p>
-</section>
+    // 4. Karanta rubutu da murya
+    document.getElementById("speakButton")
+      .addEventListener("click", function () {
 
-<script>
-function calculateProfit() {
-  const buyInput = document.getElementById("buy").value;
-  const sellInput = document.getElementById("sell").value;
-  const costInput = document.getElementById("cost").value;
-  const result = document.getElementById("profitResult");
+        const text =
+          voiceQuestion.value.trim();
 
-  if (buyInput === "" || sellInput === "" || costInput === "") {
-    result.textContent = "Don Allah, cika dukkan guraben kuɗi.";
-    return;
-  }
+        if (!text) {
+          voiceStatus.textContent =
+            "Ka fara rubuta magana ko ka yi magana da murya.";
 
-  const buy = Number(buyInput);
-  const sell = Number(sellInput);
-  const cost = Number(costInput);
+          return;
+        }
 
-  if (![buy, sell, cost].every(n => Number.isFinite(n) && n >= 0)) {
-    result.textContent = "Ka shigar da kuɗi masu inganci.";
-    return;
-  }
+        if (!("speechSynthesis" in window)) {
+          voiceStatus.textContent =
+            "Wayarka ba ta goyon bayan wannan fasalin.";
 
-  const total = sell - buy - cost;
-  const money = new Intl.NumberFormat("en-NG", {
-    style: "currency",
-    currency: "NGN",
-    maximumFractionDigits: 2
-  });
+          return;
+        }
 
-  result.textContent = total > 0
-    ? "Ribar da ka samu: " + money.format(total)
-    : total < 0
-      ? "Asarar da ka yi: " + money.format(-total)
-      : "Ba ka samu riba ko asara ba.";
-}
-</script><section id="hausaVoice" style="max-width:500px;margin:20px auto;padding:20px;border-radius:12px;background:#f0fdf4;font-family:Arial,sans-serif">
-  <h2>🎙️ Mataimakin Hausa da Murya</h2>
-  <p>Danna maɓallin nan ka yi magana da Hausa.</p>
+        const utterance =
+          new SpeechSynthesisUtterance(text);
 
-  <button id="voiceButton" type="button"
-    style="padding:12px 18px;background:green;color:white;border:0;border-radius:8px">
-    🎤 Fara Magana
-  </button>
+        utterance.lang =
+          document.getElementById("language").value === "ha"
+            ? "ha-NG"
+            : "en-US";
 
-  <p id="voiceStatus" aria-live="polite">A shirye nake.</p>
+        window.speechSynthesis.cancel();
 
-  <textarea id="voiceQuestion" rows="4"
-    placeholder="Abin da ka faɗa zai bayyana a nan..."
-    style="width:100%;box-sizing:border-box;padding:10px"></textarea>
+        window.speechSynthesis.speak(utterance);
 
-  <button id="speakButton" type="button"
-    style="padding:10px;background:#166534;color:white;border:0;border-radius:8px">
-    🔊 Karanta Rubutun
-  </button>
-</section>
+        voiceStatus.textContent =
+          "Ana ƙoƙarin karanta rubutun da murya.";
+      });
 
-<script>
-(() => {
-  const button = document.getElementById("voiceButton");
-  const status = document.getElementById("voiceStatus");
-  const question = document.getElementById("voiceQuestion");
-  const speakButton = document.getElementById("speakButton");
+  </script>
 
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  button.addEventListener("click", () => {
-    if (!SpeechRecognition) {
-      status.textContent =
-        "Mai bincikenka ba ya goyon bayan wannan fasalin. Gwada Chrome.";
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = "ha-NG";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.onstart = () => {
-      status.textContent = "Ina sauraronka... Yi magana yanzu.";
-    };
-
-    recognition.onresult = (event) => {
-      question.value = event.results[0][0].transcript;
-      status.textContent = "An gane maganarka. Ka duba rubutun.";
-    };
-
-    recognition.onerror = () => {
-      status.textContent =
-        "Ba a gane magana ba. Duba izinin makirufo da intanet.";
-    };
-
-    recognition.onend = () => {
-      button.disabled = false;
-    };
-
-    button.disabled = true;
-    recognition.start();
-  });
-
-  speakButton.addEventListener("click", () => {
-    if (!("speechSynthesis" in window)) {
-      status.textContent = "Wayarka ba ta goyon bayan karanta rubutu da murya.";
-      return;
-    }
-
-    const text = question.value.trim();
-    if (!text) {
-      status.textContent = "Ka fara yin magana ko rubuta wani abu.";
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "ha-NG";
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-    status.textContent = "Ina karanta rubutun.";
-  });
-})();
-</script>
 </body>
 </html>
